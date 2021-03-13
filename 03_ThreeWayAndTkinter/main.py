@@ -5,12 +5,12 @@ import numpy as np
 
 class ExitButton(tk.Button):
     def __init__(self, window):
-        tk.Button.__init__(self, window, text="Exit", command=window.quit)
-        self.grid(row=0, column=1, sticky=tk.N+tk.S+tk.E+tk.W)
+        tk.Button.__init__(self, window, text="Exit",  height=2, command=window.quit)
+        self.grid(row=0, column=3, sticky=tk.N+tk.S+tk.E+tk.W)
 
 class NewButton(tk.Button):
     def __init__(self, window):
-        tk.Button.__init__(self, window, text="New", command=window.NewPositions)
+        tk.Button.__init__(self, window, text="New",  height=2, command=window.NewPositions)
         self.grid(row=0, column=0, sticky=tk.N+tk.S+tk.E+tk.W)
 
 class Number(tk.Button):
@@ -19,7 +19,7 @@ class Number(tk.Button):
         self.matrix_ = matrix
         self.number_ = number
         self.shifts_ = [-1, 1, -4, 4]
-        tk.Button.__init__(self, app, text=str(number), command=self.CheckPosition)
+        tk.Button.__init__(self, app, text=str(number), height=5, width=10, command=self.CheckPosition)
     
     def UpdatePosition(self):
         posNum = self.matrix_[self.number_]
@@ -64,8 +64,17 @@ class Application(tk.Frame):
 
     def NewPositions(self):
         np.random.shuffle(self.matrix_)
+        while(self.CheckSolvability()):
+            np.random.shuffle(self.matrix_)
         for number in self.numbers_:
             number.UpdatePosition()
+    
+    def CheckSolvability(self):
+        sum = 0
+        for i in range(1, 16):
+            sum += (self.matrix_[i+1:] < self.matrix_[i]).sum()
+        sum += self.matrix_[0] // 4
+        return sum % 2 == 0
     
     def CheckWin(self):
         if np.array_equal(self.matrix_, self.winMatrix_):
