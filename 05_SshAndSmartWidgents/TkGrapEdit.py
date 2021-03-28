@@ -96,9 +96,7 @@ class TextFrame(LabelFrame):
             if params is None:
                 self.T.insert(tk.END, line, 'warning')
             else:
-                print("NOOOO", id, curId)
                 if (id == curId):
-                    print("update")
                     self.eventModule.sendCreate(
                         params["type"], 
                         float(x0), float(y0), 
@@ -176,7 +174,6 @@ class CanvasFrame(LabelFrame):
                 fill=self._fillColor,
                 outline=self._lineColor,
                 width=self._lineWidth)
-            print(id)
             self._activeFigure = id, x, y
             self._action = "Create"
 
@@ -232,7 +229,6 @@ class EventModule():
             recv.create(nameFigure, x0, y0, x1, y1, lineWidth, lineColor, fillColor)
 
     def sendUpdate(self, id, x0, y0, x1, y1):
-        print("OK")
         for recv in self.recvs:
             recv.update(id, x0, y0, x1, y1)
 
